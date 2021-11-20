@@ -2,16 +2,27 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 public class Grafo_ND_P {
 	
-	String[] V;
-	int[] E;
-	int[] w;
+	String[] V = null;
+	int[] E = null;
+	int[] w = null;
 
+	public Grafo_ND_P() {
+		
+	}
+	
+	public Grafo_ND_P(String[] Vertice,int[] E_Aresta,int[] w_Peso) {
+		V = Vertice;
+		E = E_Aresta;
+		w = w_Peso;
+	}
+	
 	public int qtdVertices() {
 		return 1;
 	}
@@ -76,15 +87,20 @@ public class Grafo_ND_P {
 		// So LineEdges - 1, is the number of vertices lines
 		System.out.println(lineEdges);
 		
+		// Array for Vertices
+		String[] Vert = new String [lineEdges];
+		
 		// Allocatint the Vertice labbles in the graf
 		for (int i = 1; i < lineEdges; i++) {
 			String str1 = (String) l.get(i);
 			str1 = str1.substring(3,str1.length() - 1);
-			System.out.println(str1);
-			V[i-1] = str1;
+			Vert[i-1] = str1;
+			System.out.println(Vert[i-1]);
 		}
+		
+		
 		// Checking to see if works
-		System.out.print(V[2].toString());
+		//System.out.print(V[].toString());
 	}
 }
 
