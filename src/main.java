@@ -8,7 +8,10 @@ public class main {
 		File file = new File("C:\\Users\\gabri\\Downloads\\ContemCicloEuleriano.net");
 		
 		Grafo_ND_P grafo = new Grafo_ND_P();
+		
+		
 		grafo.ler(file);
+		
 	}
 
 }
