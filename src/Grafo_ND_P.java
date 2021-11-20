@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 public class Grafo_ND_P {
 	
-	int[] V;
+	String[] V;
 	int[] E;
 	int[] w;
 
@@ -61,19 +61,30 @@ public class Grafo_ND_P {
 	public void ler(File file) throws IOException {
 		 
 		List l = readFileInList("C:\\\\Users\\\\gabri\\\\Downloads\\\\ContemCicloEuleriano.net");
-		 
-		Iterator<String> itr = l.iterator();
-		while (itr.hasNext()) {
-			System.out.println(itr.next());
+		
+		int lineEdges = -1;
+		// Just to see the number of Vertices in the file
+		for (int i = 0; i < l.size(); i++) {
+			
+			System.out.println((String) l.get(i));
+			String strFor = (String) l.get(i);
+			if (strFor.equals("*edges")) {
+				lineEdges = i;
+			}
 		}
+
+		// So LineEdges - 1, is the number of vertices lines
+		System.out.println(lineEdges);
 		
-		String str1 = (String) l.get(1);
-		
-		str1 = str1.substring(3,str1.length() - 1);
-		
-		
-		System.out.println(str1);
-		
+		// Allocatint the Vertice labbles in the graf
+		for (int i = 1; i < lineEdges; i++) {
+			String str1 = (String) l.get(i);
+			str1 = str1.substring(3,str1.length() - 1);
+			System.out.println(str1);
+			V[i-1] = str1;
+		}
+		// Checking to see if works
+		System.out.print(V[2].toString());
 	}
 }
 
