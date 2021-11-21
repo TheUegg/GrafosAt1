@@ -12,7 +12,11 @@ public class main {
 		
 		grafo = grafo.ler(file);
 		
-		System.out.print(grafo.V[1]);
+		System.out.println(grafo.V[1]);
+		System.out.println(grafo.qtdVertices());
+		System.out.println(grafo.qtdArestas());
+		
+		System.out.println(grafo.rotulo(grafo.V));
 	}
 
 }

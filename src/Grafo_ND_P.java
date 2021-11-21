@@ -24,19 +24,23 @@ public class Grafo_ND_P {
 	}
 	
 	public int qtdVertices() {
-		return 1;
+		return V.length;
 	}
 	
 	public int qtdArestas() {
-		return 1;
+		return E.length;
 	}
 	
 	public int grau() {
 		return 1;
 	}
 	
-	public int rotulo() {
-		return 1;
+	public String rotulo(String[] V) {
+		Scanner reader = new Scanner(System.in);
+		int index = 0;
+		System.out.print("Qual o número do rotulo?");
+		index = reader.nextInt();
+		return V[index];
 	}
 	
 	public int vizinhos() {
