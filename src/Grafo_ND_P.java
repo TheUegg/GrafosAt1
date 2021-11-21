@@ -69,7 +69,7 @@ public class Grafo_ND_P {
 	    return lines;
 	}
 	
-	public void ler(File file) throws IOException {
+	public Grafo_ND_P ler(File file) throws IOException {
 		 
 		List l = readFileInList("C:\\\\Users\\\\gabri\\\\Downloads\\\\ContemCicloEuleriano.net");
 		
@@ -132,9 +132,9 @@ public class Grafo_ND_P {
 		}
 		
 		
-		/*
-		 * NEED TO CALL THE CONSTRUCTOR, U GOT THE VERTICE ARESTA AND PESO
-		 * */
+		Grafo_ND_P grafo = new Grafo_ND_P(Vert,Arest,Pesos);
+		
+		return grafo;
 		
 	}
 }

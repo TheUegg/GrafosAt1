@@ -10,8 +10,9 @@ public class main {
 		Grafo_ND_P grafo = new Grafo_ND_P();
 		
 		
-		grafo.ler(file);
+		grafo = grafo.ler(file);
 		
+		System.out.print(grafo.V[1]);
 	}
 
 }
