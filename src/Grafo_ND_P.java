@@ -10,14 +10,14 @@ import java.util.Scanner;
 public class Grafo_ND_P {
 	
 	String[] V = null;
-	int[] E = null;
-	int[] w = null;
+	int[][] E = null;
+	float[] w = null;
 
 	public Grafo_ND_P() {
 		
 	}
 	
-	public Grafo_ND_P(String[] Vertice,int[] E_Aresta,int[] w_Peso) {
+	public Grafo_ND_P(String[] Vertice,int[][] E_Aresta,float[] w_Peso) {
 		V = Vertice;
 		E = E_Aresta;
 		w = w_Peso;
@@ -90,7 +90,18 @@ public class Grafo_ND_P {
 		// Array for Vertices
 		String[] Vert = new String [lineEdges];
 		
-		// Allocatint the Vertice labbles in the graf
+		
+		// calc to see how many "Arestas"
+		int calcAr = l.size() - lineEdges;
+		System.out.println(calcAr);
+		
+		// Array for Pesos
+		float[] Pesos = new float[calcAr];
+		
+		// MultArray for Arestas
+		int[][] Arest = new int[calcAr][3];
+		
+		// Allocate the Vertice labbles in the graf
 		for (int i = 1; i < lineEdges; i++) {
 			String str1 = (String) l.get(i);
 			str1 = str1.substring(3,str1.length() - 1);
@@ -98,9 +109,33 @@ public class Grafo_ND_P {
 			System.out.println(Vert[i-1]);
 		}
 		
+		// Allocate the Peso values in the graf
+		for (int i = lineEdges+1; i < l.size(); i++) {
+			String str2 = (String) l.get(i);
+			str2 = str2.substring(4);
+			Pesos[i-calcAr] = Float.parseFloat(str2);
+			System.out.println(Pesos[i-calcAr]);
+		}
 		
-		// Checking to see if works
-		//System.out.print(V[].toString());
+		// Alocate the Arestas index to Vaertice and Peso in the graf
+		for (int i = lineEdges+1; i < l.size(); i++) {
+			String str3 = (String) l.get(i);
+			String str4 = str3.substring(2,3);
+			str3 = str3.substring(0,1);
+			
+			Arest[i-calcAr][0] = Integer.parseInt(str3);
+			Arest[i-calcAr][1] = Integer.parseInt(str4);
+			Arest[i-calcAr][2] = i-calcAr;
+			System.out.println(Arest[i-calcAr][0]);
+			System.out.println(Arest[i-calcAr][1]);
+			System.out.println(Arest[i-calcAr][2]);
+		}
+		
+		
+		/*
+		 * NEED TO CALL THE CONSTRUCTOR, U GOT THE VERTICE ARESTA AND PESO
+		 * */
+		
 	}
 }
 
