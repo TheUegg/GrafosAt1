@@ -44,21 +44,21 @@ public class Grafo_ND_P {
 	    return lines;
 	}
 	
-	public int qtdVertices() {
-		return V.length;
+	protected int qtdVertices(Grafo_ND_P grafo) {
+		return grafo.V.length;
 	}
 	
-	public int qtdArestas() {
-		return E.length;
+	protected int qtdArestas(Grafo_ND_P grafo) {
+		return grafo.E.length;
 	}
 	
-	public int grau(int v) {
+	protected int grau(int v,Grafo_ND_P grafo) {
 		int count = 0;
-		for (int i = 0; i < E.length; i++) {
-			if (E[i][0] == v) {
+		for (int i = 0; i < grafo.E.length; i++) {
+			if (grafo.E[i][0] == v) {
 				count++;
 			}
-			if(E[i][1] == v ) {
+			if(grafo.E[i][1] == v ) {
 				count++;
 			}
 		}
@@ -66,7 +66,7 @@ public class Grafo_ND_P {
 		return count;
 	}
 	
-	public String rotulo(String[] V) {
+	protected String rotulo(String[] V) {
 		Scanner reader = new Scanner(System.in);
 		int index = 0;
 		System.out.print("Qual o número do rotulo?");
@@ -74,14 +74,14 @@ public class Grafo_ND_P {
 		return V[index];
 	}
 	
-	public List<Integer> vizinhos(int v,Grafo_ND_P grafo) {
+	protected List<Integer> vizinhos(int v,Grafo_ND_P grafo) {
 		
         List<Integer> viz = new ArrayList<Integer>();
-        for (int i = 0; i < E.length; i++) {
-			if (E[i][0] == v) {
+        for (int i = 0; i < grafo.E.length; i++) {
+			if (grafo.E[i][0] == v) {
 				viz.add(E[i][1]);
 			}
-			if(E[i][1] == v ) {
+			if(grafo.E[i][1] == v ) {
 				viz.add(E[i][0]);
 			}
 		}
@@ -89,15 +89,15 @@ public class Grafo_ND_P {
 		return viz;
 	}
 	
-	public boolean haAresta(int u, int v) {
+	protected boolean haAresta(int u, int v, Grafo_ND_P grafo) {
 		boolean existe = false;
 		boolean existe2 = false;
-		for (int i = 0; i < E[0].length; i++) {
+		for (int i = 0; i < grafo.E[0].length; i++) {
 			for (int j = 0; j < 2; j++) {
-				if (E[i][j] == u) {
+				if (grafo.E[i][j] == u) {
 					existe = true;
 				}
-				if(E[i][j] == v && existe == true) {
+				if(grafo.E[i][j] == v && existe == true) {
 					existe2 = true;
 				}
 			}
@@ -106,26 +106,25 @@ public class Grafo_ND_P {
 		return existe2;
 	}
 	
-	public Float peso(int u, int v) {
+	protected Float peso(int u, int v,Grafo_ND_P grafo) {
 		boolean existe = false;
-		for (int i = 0; i < E[0].length; i++) {
+		for (int i = 0; i < grafo.E[0].length; i++) {
 			for (int j = 0; j < 2; j++) {
-				if (E[i][j] == u) {
+				if (grafo.E[i][j] == u) {
 					existe = true;
 				}
-				if(E[i][j] == v && existe == true) {
-					System.out.print(w[E[i][2]]);
+				if(grafo.E[i][j] == v && existe == true) {
+					//System.out.print(w[E[i][2]]);
 					return w[E[i][2]];
 				}
 			}
 			existe = false;
 		}
-		
 		return POSITIVE_INFINITY;
 	}
 	
 	
-	public Grafo_ND_P ler(File file) throws IOException {
+	protected Grafo_ND_P ler(File file) throws IOException {
 		 
 		List l = readFileInList("C:\\\\Users\\\\gabri\\\\Downloads\\\\ContemCicloEuleriano.net");
 		
@@ -141,7 +140,7 @@ public class Grafo_ND_P {
 		}
 
 		// So LineEdges - 1, is the number of vertices lines
-		System.out.println(lineEdges);
+		//System.out.println(lineEdges);
 		
 		// Array for Vertices
 		String[] Vert = new String [lineEdges];
@@ -149,7 +148,7 @@ public class Grafo_ND_P {
 		
 		// calc to see how many "Arestas"
 		int calcAr = l.size() - lineEdges;
-		System.out.println(calcAr);
+		//System.out.println(calcAr);
 		
 		// Array for Pesos
 		float[] Pesos = new float[calcAr];
@@ -162,7 +161,7 @@ public class Grafo_ND_P {
 			String str1 = (String) l.get(i);
 			str1 = str1.substring(3,str1.length() - 1);
 			Vert[i-1] = str1;
-			System.out.println(Vert[i-1]);
+			//System.out.println(Vert[i-1]);
 		}
 		
 		// Allocate the Peso values in the graf
@@ -170,7 +169,7 @@ public class Grafo_ND_P {
 			String str2 = (String) l.get(i);
 			str2 = str2.substring(4);
 			Pesos[i-calcAr] = Float.parseFloat(str2);
-			System.out.println(Pesos[i-calcAr]);
+			//System.out.println(Pesos[i-calcAr]);
 		}
 		
 		// Alocate the Arestas index to Vertice and Peso in the graf
