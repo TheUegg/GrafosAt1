@@ -6,14 +6,14 @@ public class main {
 
 	public static void main(String[] args) throws IOException {
 		Scanner reader = new Scanner(System.in);
-		File file = new File("C:\\Users\\gabri\\Downloads\\ContemCicloEuleriano.net");
+		File file = new File("C:\\Users\\gabri\\Downloads\\fln_pequena.net");
 		
 		Grafo_ND_P grafo = new Grafo_ND_P();
 		
 		
 		grafo = grafo.ler(file);
 		
-		System.out.println(grafo.V[1]);
+		//System.out.println(grafo.V[1]);
 		System.out.println(grafo.qtdVertices(grafo));
 		System.out.println(grafo.qtdArestas(grafo));
 		

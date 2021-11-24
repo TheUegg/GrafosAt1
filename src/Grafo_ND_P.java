@@ -45,11 +45,11 @@ public class Grafo_ND_P {
 	}
 	
 	protected int qtdVertices(Grafo_ND_P grafo) {
-		return grafo.V.length;
+		return grafo.V.length-1;
 	}
 	
 	protected int qtdArestas(Grafo_ND_P grafo) {
-		return grafo.E.length;
+		return grafo.E.length-1;
 	}
 	
 	protected int grau(int v,Grafo_ND_P grafo) {
@@ -71,7 +71,7 @@ public class Grafo_ND_P {
 		int index = 0;
 		System.out.print("Qual o número do rotulo?");
 		index = reader.nextInt();
-		return V[index];
+		return V[index-1];
 	}
 	
 	protected List<Integer> vizinhos(int v,Grafo_ND_P grafo) {
@@ -140,7 +140,7 @@ public class Grafo_ND_P {
 		}
 
 		// So LineEdges - 1, is the number of vertices lines
-		//System.out.println(lineEdges);
+		System.out.println(lineEdges);
 		
 		// Array for Vertices
 		String[] Vert = new String [lineEdges];
@@ -148,7 +148,7 @@ public class Grafo_ND_P {
 		
 		// calc to see how many "Arestas"
 		int calcAr = l.size() - lineEdges;
-		//System.out.println(calcAr);
+		System.out.println(calcAr);
 		
 		// Array for Pesos
 		float[] Pesos = new float[calcAr];
@@ -168,8 +168,10 @@ public class Grafo_ND_P {
 		for (int i = lineEdges+1; i < l.size(); i++) {
 			String str2 = (String) l.get(i);
 			str2 = str2.substring(4);
-			Pesos[i-calcAr] = Float.parseFloat(str2);
-			//System.out.println(Pesos[i-calcAr]);
+			str2 = str2.replaceAll(" ","");
+			//System.out.println(str2);
+			Pesos[i-lineEdges] = Float.parseFloat(str2);
+			System.out.println(Pesos[i-lineEdges]);
 		}
 		
 		// Alocate the Arestas index to Vertice and Peso in the graf
@@ -179,9 +181,9 @@ public class Grafo_ND_P {
 			str3 = str3.substring(0,1);
 			//System.out.print(str3+" "+str4);
 			
-			Arest[i-calcAr][0] = Integer.parseInt(str3);
-			Arest[i-calcAr][1] = Integer.parseInt(str4);
-			Arest[i-calcAr][2] = i-calcAr;
+			Arest[i-lineEdges][0] = Integer.parseInt(str3);
+			Arest[i-lineEdges][1] = Integer.parseInt(str4);
+			Arest[i-lineEdges][2] = i-calcAr;
 			//System.out.println(Arest[i-calcAr][0]);
 			//System.out.println(Arest[i-calcAr][1]);
 			//System.out.println(Arest[i-calcAr][2]);
