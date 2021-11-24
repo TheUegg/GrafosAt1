@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 public class Grafo_ND_P {
 	
 	private static final Float POSITIVE_INFINITY = null;
@@ -49,7 +51,7 @@ public class Grafo_ND_P {
 	}
 	
 	protected int qtdArestas(Grafo_ND_P grafo) {
-		return grafo.E.length-1;
+		return grafo.E.length;
 	}
 	
 	protected int grau(int v,Grafo_ND_P grafo) {
@@ -89,6 +91,7 @@ public class Grafo_ND_P {
 		return viz;
 	}
 	
+	// Falto o reverso (v u e u v são iguais)
 	protected boolean haAresta(int u, int v, Grafo_ND_P grafo) {
 		boolean existe = false;
 		boolean existe2 = false;
@@ -106,6 +109,7 @@ public class Grafo_ND_P {
 		return existe2;
 	}
 	
+	// Falto o reverso (v u e u v são iguais)
 	protected Float peso(int u, int v,Grafo_ND_P grafo) {
 		boolean existe = false;
 		for (int i = 0; i < grafo.E[0].length; i++) {
@@ -140,7 +144,7 @@ public class Grafo_ND_P {
 		}
 
 		// So LineEdges - 1, is the number of vertices lines
-		System.out.println(lineEdges);
+		//System.out.println(lineEdges);
 		
 		// Array for Vertices
 		String[] Vert = new String [lineEdges];
@@ -148,13 +152,54 @@ public class Grafo_ND_P {
 		
 		// calc to see how many "Arestas"
 		int calcAr = l.size() - lineEdges;
-		System.out.println(calcAr);
+		//System.out.println(calcAr);
 		
 		// Array for Pesos
-		float[] Pesos = new float[calcAr];
+		float[] Pesos = new float[calcAr-1];
 		
 		// MultArray for Arestas
-		int[][] Arest = new int[calcAr][3];
+		int[][] Arest = new int[7][3];
+		
+
+		Pattern p = Pattern.compile("[0-9]*\\.?[0-9]+");
+		List<Float> arestasPesosList = new ArrayList<Float>();
+		// Usa Math.round()
+		
+		for (int i = lineEdges+1; i < l.size(); i++) {	
+			Matcher m = p.matcher((CharSequence) l.get(i));
+			while (m.find()) {
+				arestasPesosList.add(Float.parseFloat(m.group()));
+				//System.out.println(m.group());
+			}
+		}
+		
+		System.out.println(arestasPesosList);
+		// 0-2 1-5 2-8 3-11 4-14 5-17 6-20  Pesos
+		//  +2  +4  +6  +8  +10   +12  +14
+		// 0-0 1-3 2-6 3-9  4-12 5-15 6-18
+		//  +0  +2  +4  +6  +8    +10  +12
+		// 0-1 1-4 2-7 3-10 4-13 5-16 6-19
+		//  +1  +3  +5  +7  +9    +11  +13
+		for (int i = lineEdges+1; i < l.size(); i++) {	
+		
+			Pesos[i-lineEdges-1] = arestasPesosList.get((i-lineEdges-1)+2*(i-lineEdges));
+			Arest[i-lineEdges-1][0] = Math.round(arestasPesosList.get((i-lineEdges-1)*3));
+			Arest[i-lineEdges-1][1] = Math.round(arestasPesosList.get(((i-lineEdges-1)*3)+1));
+			Arest[i-lineEdges-1][2] = i-calcAr;
+			
+		}
+		
+		//for (int i = 0; i < Pesos.length; i++) {
+		//	System.out.println(Pesos[i]);
+		//}
+		
+		//for (int i = 0; i < 7; i++) {
+		//	System.out.println(Arest[i][0]);
+		//}
+		
+		//for (int i = 0; i < 7; i++) {
+		//	System.out.println(Arest[i][1]);
+		//}
 		
 		// Allocate the Vertice labbles in the graf
 		for (int i = 1; i < lineEdges; i++) {
@@ -164,16 +209,24 @@ public class Grafo_ND_P {
 			//System.out.println(Vert[i-1]);
 		}
 		
-		// Allocate the Peso values in the graf
-		for (int i = lineEdges+1; i < l.size(); i++) {
-			String str2 = (String) l.get(i);
-			str2 = str2.substring(4);
-			str2 = str2.replaceAll(" ","");
-			//System.out.println(str2);
-			Pesos[i-lineEdges] = Float.parseFloat(str2);
-			System.out.println(Pesos[i-lineEdges]);
-		}
 		
+		
+		// Allocate the Peso values in the graf
+		//for (int i = lineEdges+1; i < l.size(); i++) {	
+		//	String str2 = (String) l.get(i);
+		//	str2 = str2.substring(4);
+		//	str2 = str2.replaceAll(" ","");
+			//System.out.println(str2);
+		//	Pesos[i-lineEdges] = Float.parseFloat(str2);
+			//System.out.println(Pesos[i-lineEdges]);
+		//}
+		
+		
+		
+		
+		
+		
+		/*
 		// Alocate the Arestas index to Vertice and Peso in the graf
 		for (int i = lineEdges+1; i < l.size(); i++) {
 			String str3 = (String) l.get(i);
@@ -181,14 +234,14 @@ public class Grafo_ND_P {
 			str3 = str3.substring(0,1);
 			//System.out.print(str3+" "+str4);
 			
-			Arest[i-lineEdges][0] = Integer.parseInt(str3);
-			Arest[i-lineEdges][1] = Integer.parseInt(str4);
-			Arest[i-lineEdges][2] = i-calcAr;
+			Arest[i-lineEdges-1][0] = Integer.parseInt(str3);
+			Arest[i-lineEdges-1][1] = Integer.parseInt(str4);
+			Arest[i-lineEdges-1][2] = i-calcAr;
 			//System.out.println(Arest[i-calcAr][0]);
 			//System.out.println(Arest[i-calcAr][1]);
 			//System.out.println(Arest[i-calcAr][2]);
 		}
-		
+		*/
 		
 		Grafo_ND_P grafo = new Grafo_ND_P(Vert,Arest,Pesos);
 		
