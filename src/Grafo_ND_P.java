@@ -68,6 +68,7 @@ public class Grafo_ND_P {
 		return count;
 	}
 	
+	// Com numeros maiores que 9, aparece "
 	protected String rotulo(String[] V) {
 		Scanner reader = new Scanner(System.in);
 		int index = 0;
@@ -119,7 +120,7 @@ public class Grafo_ND_P {
 	
 	protected Grafo_ND_P ler(File file) throws IOException {
 		 
-		List l = readFileInList("C:\\\\Users\\\\gabri\\\\Downloads\\\\fln_pequena.net");
+		List l = readFileInList("C:\\\\Users\\\\gabri\\\\Downloads\\\\ContemCicloEuleriano.net");
 		
 		int lineEdges = -1;
 		// Just to see the number of Vertices in the file
@@ -139,13 +140,13 @@ public class Grafo_ND_P {
 		
 		// calc to see how many "Arestas"
 		int calcAr = l.size() - lineEdges-1;
-		System.out.println(calcAr);
+		//System.out.println(calcAr);
 		
 		// Array for Pesos
 		float[] Pesos = new float[calcAr];
 		
 		// MultArray for Arestas
-		int[][] Arest = new int[calcAr][3];
+		int[][] Arest = new int[calcAr][4];
 		
 
 		Pattern p = Pattern.compile("[0-9]*\\.?[0-9]+");
@@ -188,6 +189,73 @@ public class Grafo_ND_P {
 		return grafo;
 		
 	}
+	
+	protected int existeCicloEuleriano(Grafo_ND_P grafo) {
+		
+		//  Checking if all "graus" are even
+		for (int i = 1; i <= grafo.V.length; i++) {
+			if ((grafo.grau(i, grafo)) % 2 != 0) {
+				return 0;
+			}
+		}
+		return 1;
+	}
+	
+	//  FindByNumber
+	protected List<Integer> findByNumber(Grafo_ND_P grafo, int path, int v) {
+		
+		List<Integer> indexN2 = new ArrayList<Integer>();
+		for (int i = 0; i < grafo.E.length; i++) {
+			if (grafo.E[i][1] == path && grafo.E[i][0] == v && grafo.E[i][3] == 1) {
+				indexN2.add(i);
+				indexN2.add(grafo.E[i][1]);
+				return indexN2;
+			}
+			if (grafo.E[i][0] == path && grafo.E[i][1] == v && grafo.E[i][3] == 1) {
+				indexN2.add(i);
+				indexN2.add(grafo.E[i][0]);
+				return indexN2;
+			}
+		}
+		return null;
+	}
+	
+	protected List<Integer> caminhoCicloEuleriano(Grafo_ND_P grafo) {
+			
+		// E = '1' enable, if '0' disable
+		// enabling "E"
+		for (int i = 0; i < grafo.E.length; i++) {
+			E[i][3] = 1;
+		}
+		// Final Path
+		List<Integer> pathFinal = new ArrayList<Integer>();
+		
+		// List for index + the other vertice
+		List<Integer> indexN2 = new ArrayList<Integer>();
+		
+		int v = 1;
+		pathFinal.add(v);
+		while (true) {
+			// List for paths
+			List<Integer> paths = grafo.vizinhos(v, grafo);
+			paths.sort(null);
+			for (int i = 0; i < paths.size(); i++) {
+				indexN2 = grafo.findByNumber(grafo, paths.get(i), v);
+				if (indexN2 != null) {
+					pathFinal.add(indexN2.get(1));
+					v = indexN2.get(1);
+					grafo.E[indexN2.get(0)][3] = 0;
+					break;
+				}
+			}
+			if (v == 1) {
+				break;
+			}
+		}
+		
+		return pathFinal;
+	}
+	
 }
 
 
