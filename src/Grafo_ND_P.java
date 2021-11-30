@@ -3,23 +3,26 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 public class Grafo_ND_P {
 	
 	private static final Float POSITIVE_INFINITY = null;
 	String[] V = null;
-	int[][] E = null;
-	float[] w = null;
+	int[][]  E = null;
+	float[]  w = null;
 
 	public Grafo_ND_P() {
 		
 	}
+	
+	/* Consertar ler(File file) para funcionar corretamente
+	public Grafo_ND_P(File grafo) throws IOException {
+		ler(grafo);
+	}*/
 	
 	public Grafo_ND_P(String[] Vertice,int[][] E_Aresta,float[] w_Peso) {
 		V = Vertice;
@@ -29,38 +32,34 @@ public class Grafo_ND_P {
 	
 	
 	public static List<String> readFileInList(String fileName) {
-		 
 	    List<String> lines = Collections.emptyList();
 	    try
 	    {
 	      lines =
 	       Files.readAllLines(Paths.get(fileName), StandardCharsets.UTF_8);
 	    }
-	 
 	    catch (IOException e)
 	    {
-	 
-	      // do something
 	      e.printStackTrace();
 	    }
 	    return lines;
 	}
 	
 	protected int qtdVertices(Grafo_ND_P grafo) {
-		return grafo.V.length-1;
+		return V.length-1;
 	}
 	
-	protected int qtdArestas(Grafo_ND_P grafo) {
-		return grafo.E.length;
+	protected int qtdArestas() {
+		return E.length;
 	}
 	
-	protected int grau(int v,Grafo_ND_P grafo) {
+	protected int grau(int v) {
 		int count = 0;
-		for (int i = 0; i < grafo.E.length; i++) {
-			if (grafo.E[i][0] == v) {
+		for (int i = 0; i < E.length; i++) {
+			if (E[i][0] == v) {
 				count++;
 			}
-			if(grafo.E[i][1] == v ) {
+			if(E[i][1] == v ) {
 				count++;
 			}
 		}
@@ -68,22 +67,17 @@ public class Grafo_ND_P {
 		return count;
 	}
 	
-	protected String rotulo(String[] V) {
-		Scanner reader = new Scanner(System.in);
-		int index = 0;
-		System.out.print("Qual o número do rotulo?");
-		index = reader.nextInt();
+	protected String rotulo(int index) {
 		return V[index-1];
 	}
 	
-	protected List<Integer> vizinhos(int v,Grafo_ND_P grafo) {
-		
-        List<Integer> viz = new ArrayList<Integer>();
-        for (int i = 0; i < grafo.E.length; i++) {
-			if (grafo.E[i][0] == v) {
+	protected List<Integer> vizinhos(int v) {
+	    List<Integer> viz = new ArrayList<Integer>();
+	    for (int i = 0; i < E.length; i++) {
+			if (E[i][0] == v) {
 				viz.add(E[i][1]);
 			}
-			if(grafo.E[i][1] == v ) {
+			if(E[i][1] == v ) {
 				viz.add(E[i][0]);
 			}
 		}
@@ -91,13 +85,10 @@ public class Grafo_ND_P {
 		return viz;
 	}
 	
-	// Faltou o reverso (v u e u v são iguais)
-	protected boolean haAresta(int u, int v, Grafo_ND_P grafo) {
-		boolean existe = false;
-		boolean existe2 = false;
-		for (int i = 0; i < grafo.E.length; i++) {
+	protected boolean haAresta(int u, int v) {
+		for (int i = 0; i < E.length; i++) {
 			
-			if ((grafo.E[i][0] == u && grafo.E[i][1] == v) || (grafo.E[i][0] == v && grafo.E[i][1] == u)) {
+			if ((E[i][0] == u && E[i][1] == v) || (E[i][0] == v && E[i][1] == u)) {
 				return true;
 			}
 
@@ -105,11 +96,9 @@ public class Grafo_ND_P {
 		return false;
 	}
 	
-	// Faltou o reverso (v u e u v são iguais)
-	protected Float peso(int u, int v,Grafo_ND_P grafo) {
-		boolean existe = false;
-		for (int i = 0; i < grafo.E.length; i++) {
-			if ((grafo.E[i][0] == u && grafo.E[i][1] == v) || (grafo.E[i][0] == v && grafo.E[i][1] == u)) {
+	protected Float peso(int u, int v) {
+		for (int i = 0; i < E.length; i++) {
+			if ((E[i][0] == u && E[i][1] == v) || (E[i][0] == v && E[i][1] == u)) {
 				return w[E[i][2]];
 			}
 		}
@@ -119,7 +108,8 @@ public class Grafo_ND_P {
 	
 	protected Grafo_ND_P ler(File file) throws IOException {
 		 
-		List l = readFileInList("C:\\\\Users\\\\gabri\\\\Downloads\\\\fln_pequena.net");
+		//List l = readFileInList("C:\\\\Users\\\\gabri\\\\Downloads\\\\fln_pequena.net");
+		List l = readFileInList("C:\\Users\\User\\Downloads\\fln_pequena.net");
 		
 		int lineEdges = -1;
 		// Just to see the number of Vertices in the file
@@ -131,7 +121,7 @@ public class Grafo_ND_P {
 				lineEdges = i;
 			}
 		}
-
+		
 		
 		// Array for Vertices
 		String[] Vert = new String [lineEdges];
@@ -178,7 +168,7 @@ public class Grafo_ND_P {
 		// Allocate the Vertice labbles in the graf
 		for (int i = 1; i < lineEdges; i++) {
 			String str1 = (String) l.get(i);
-			str1 = str1.substring(3,str1.length() - 1);
+			str1 = str1.substring(2,str1.length() - 1);
 			Vert[i-1] = str1;
 		}
 		
@@ -188,6 +178,7 @@ public class Grafo_ND_P {
 		return grafo;
 		
 	}
+	
 }
 
 
