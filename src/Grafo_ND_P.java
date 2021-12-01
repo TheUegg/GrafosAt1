@@ -45,8 +45,8 @@ public class Grafo_ND_P {
 	    return lines;
 	}
 	
-	protected int qtdVertices(Grafo_ND_P grafo) {
-		return V.length-1;
+	protected int qtdVertices() {
+		return V.length;
 	}
 	
 	protected int qtdArestas() {
@@ -106,38 +106,33 @@ public class Grafo_ND_P {
 	}
 	
 	
-	protected Grafo_ND_P ler(File file) throws IOException {
-		 
-		//List l = readFileInList("C:\\\\Users\\\\gabri\\\\Downloads\\\\fln_pequena.net");
-		List l = readFileInList("C:\\Users\\User\\Downloads\\fln_pequena.net");
+	protected void ler(File file) throws IOException {
 		
-		int lineEdges = -1;
-		// Just to see the number of Vertices in the file
-		for (int i = 0; i < l.size(); i++) {
-			
+		List l = readFileInList(file.getPath());
+		
+		//print
+		for (int i = 0; i < l.size(); i++) {	
 			System.out.println((String) l.get(i));
-			String strFor = (String) l.get(i);
-			if (strFor.equals("*edges")) {
-				lineEdges = i;
-			}
 		}
+				
+		int lineEdges = -1;
 		
+		// Just to see the number of Vertices in the file
+		String strFor1 = (String) l.get(0);
+		lineEdges = Integer.parseInt(strFor1.substring(10));
 		
 		// Array for Vertices
 		String[] Vert = new String [lineEdges];
 		
-		
 		// calc to see how many "Arestas"
-		int calcAr = l.size() - lineEdges-1;
-		System.out.println(calcAr);
+		int calcAr = l.size() - lineEdges-2;
 		
 		// Array for Pesos
 		float[] Pesos = new float[calcAr];
 		
 		// MultArray for Arestas
-		int[][] Arest = new int[calcAr][3];
+		int[][] Arest = new int[calcAr][4];
 		
-
 		Pattern p = Pattern.compile("[0-9]*\\.?[0-9]+");
 		List<Float> arestasPesosList = new ArrayList<Float>();
 		
@@ -148,6 +143,8 @@ public class Grafo_ND_P {
 			}
 		}
 		
+		
+		//Set the values
 		//System.out.println(arestasPesosList);
 		// 0-2 1-5 2-8 3-11 4-14 5-17 6-20  Pesos
 		//  +2  +4  +6  +8  +10   +12  +14
@@ -155,28 +152,98 @@ public class Grafo_ND_P {
 		//  +0  +2  +4  +6  +8    +10  +12
 		// 0-1 1-4 2-7 3-10 4-13 5-16 6-19
 		//  +1  +3  +5  +7  +9    +11  +13
-		for (int i = lineEdges+1; i < l.size(); i++) {	
+		for (int i = 0; i < lineEdges; i++) {		
+			Pesos[i] = arestasPesosList.get((i)+2*(i+1));
+			Arest[i][0] = Math.round(arestasPesosList.get((i)*3));
+			Arest[i][1] = Math.round(arestasPesosList.get(((i)*3)+1));
+			Arest[i][2] = (i);
+			// Allocate the Vertice labbles in the graf
+			String str1 = (String) l.get(i+1);
+			str1 = str1.replace("\"", "");
+			String[] parts = str1.split(" ");
+			parts[0] = "";
+			str1 = String.join(" ",parts);
+			str1 = str1.substring(1);
+			Vert[i] = str1;
+		}
+	
+		for (int i = lineEdges; i < calcAr; i++) {
+			Pesos[i] = arestasPesosList.get((i)+2*(i+1));
+			Arest[i][0] = Math.round(arestasPesosList.get((i)*3));
+			Arest[i][1] = Math.round(arestasPesosList.get(((i)*3)+1));
+			Arest[i][2] = (i);
+		}		
 		
-			Pesos[i-lineEdges-1] = arestasPesosList.get((i-lineEdges-1)+2*(i-lineEdges));
-			Arest[i-lineEdges-1][0] = Math.round(arestasPesosList.get((i-lineEdges-1)*3));
-			Arest[i-lineEdges-1][1] = Math.round(arestasPesosList.get(((i-lineEdges-1)*3)+1));
-			Arest[i-lineEdges-1][2] = (i-lineEdges-1);
+		w = Pesos;
+		E = Arest;
+		V = Vert;
+		
+	}
+	
+protected int existeCicloEuleriano(Grafo_ND_P grafo) {
+		
+		//  Checking if all "graus" are even
+		for (int i = 1; i <= grafo.V.length; i++) {
+			if ((grafo.grau(i)) % 2 != 0) {
+				return 0;
+			}
+		}
+		return 1;
+	}
+	
+	//  FindByNumber
+	protected List<Integer> findByNumber(Grafo_ND_P grafo, int path, int v) {
+		
+		List<Integer> indexN2 = new ArrayList<Integer>();
+		for (int i = 0; i < grafo.E.length; i++) {
+			if (grafo.E[i][1] == path && grafo.E[i][0] == v && grafo.E[i][3] == 1) {
+				indexN2.add(i);
+				indexN2.add(grafo.E[i][1]);
+				return indexN2;
+			}
+			if (grafo.E[i][0] == path && grafo.E[i][1] == v && grafo.E[i][3] == 1) {
+				indexN2.add(i);
+				indexN2.add(grafo.E[i][0]);
+				return indexN2;
+			}
+		}
+		return null;
+	}
+	
+	protected List<Integer> caminhoCicloEuleriano(Grafo_ND_P grafo) {
 			
+		// E = '1' enable, if '0' disable
+		// enabling "E"
+		for (int i = 0; i < grafo.E.length; i++) {
+			E[i][3] = 1;
 		}
-
+		// Final Path
+		List<Integer> pathFinal = new ArrayList<Integer>();
 		
-		// Allocate the Vertice labbles in the graf
-		for (int i = 1; i < lineEdges; i++) {
-			String str1 = (String) l.get(i);
-			str1 = str1.substring(2,str1.length() - 1);
-			Vert[i-1] = str1;
+		// List for index + the other vertice
+		List<Integer> indexN2 = new ArrayList<Integer>();
+		
+		int v = 1;
+		pathFinal.add(v);
+		while (true) {
+			// List for paths
+			List<Integer> paths = grafo.vizinhos(v);
+			paths.sort(null);
+			for (int i = 0; i < paths.size(); i++) {
+				indexN2 = grafo.findByNumber(grafo, paths.get(i), v);
+				if (indexN2 != null) {
+					pathFinal.add(indexN2.get(1));
+					v = indexN2.get(1);
+					grafo.E[indexN2.get(0)][3] = 0;
+					break;
+				}
+			}
+			if (v == 1) {
+				break;
+			}
 		}
 		
-		
-		Grafo_ND_P grafo = new Grafo_ND_P(Vert,Arest,Pesos);
-		
-		return grafo;
-		
+		return pathFinal;
 	}
 	
 }
