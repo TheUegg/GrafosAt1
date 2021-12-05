@@ -1,45 +1,55 @@
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 public class main {
 
 	public static void main(String[] args) throws IOException {
-		Scanner reader = new Scanner(System.in);
-		File file = new File("C:\\Users\\gabri\\Downloads\\fln_pequena.net");
-		
-		Grafo_ND_P grafo = new Grafo_ND_P();
-		
-		grafo.ler(file);
-		
-		//System.out.println(grafo.V[1]);
-		System.out.println(grafo.qtdVertices());
-		System.out.println(grafo.qtdArestas());
-		
-		
-		
-		System.out.println("Qual o aresta que você quer saber o peso?");
-		int u = reader.nextInt();
-		int v = reader.nextInt();
-		System.out.println(grafo.rotulo(v));
-		System.out.println(grafo.peso(u, v));
-		//System.out.println("Qual o Vertice que você quer saber se tem aresta?");
-		//u = reader.nextInt();
-		//v = reader.nextInt();
-		System.out.println(grafo.haAresta(u, v));
-		//System.out.println("Qual o Vertice que você quer saber os vizinhos?");
-		//v = reader.nextInt();
-		System.out.println(grafo.vizinhos(v));
-		//System.out.println("Qual o Vertice que você quer saber o grau?");
-		//v = reader.nextInt();
-		System.out.println(grafo.grau(v));
-		
-		int existe = grafo.existeCicloEuleriano(grafo);
-		System.out.println(existe);
-		if (existe == 1) {
-			System.out.println(grafo.caminhoCicloEuleriano(grafo));
+		System.out.println("============================================================");
+		System.out.println("Exercício 1 | grafo: email.net");
+		File emailFile = new File("./grafos/email.net");
+		Grafo_ND_P email = new Grafo_ND_P(emailFile);
+		System.out.println("Vértices: "+email.qtdVertices());
+		System.out.println("Arestas: "+email.qtdArestas());
+		System.out.println("Grau vértice 500: "+email.grau(500));
+		System.out.println("Rótulo vértice 500: "+email.rotulo(500));
+		System.out.print("Vizinhos vértice 500: [");
+		List<Integer> vizinhos = email.vizinhos(500);
+		for (int i=0; i<vizinhos.size(); i++) {
+			System.out.print(" "+vizinhos.get(i));
 		}
-		
+		System.out.println(" ]");
+		System.out.println("Há aresta 500 61: "+email.haAresta(500, 61));
+		System.out.println("Há aresta 500 62: "+email.haAresta(500, 62));
+		System.out.println("Peso aresta 500 61: "+email.peso(500, 61));
+		System.out.println();
+		System.out.println("============================================================");
+		System.out.println("Exercício 2 | grafo: karate.net raiz: 10");
+		File karateFile = new File("./grafos/karate.net");
+		BuscaEmLargura karateBL = new BuscaEmLargura(karateFile, 10);
+		System.out.println("============================================================");
+		System.out.println("Exercício 3.1 | grafo: ContemCicloEuleriano.net");
+		File CCEfile = new File("./grafos/ContemCicloEuleriano.net");
+		Grafo_ND_P CCE = new Grafo_ND_P(CCEfile);
+		System.out.println("Contem ciclo Euleriano: "+CCE.existeCicloEuleriano());
+		System.out.print("Caminho ciclo: [");
+		List<Integer> ciclo = CCE.caminhoCicloEuleriano();
+		for (int i=0; i<ciclo.size(); i++) {
+			System.out.print(" "+ciclo.get(i));
+		}
+		System.out.println(" ]");
+		System.out.println("Exercício 3.2 | grafo: SemCicloEuleriano.net");
+		File SCEfile = new File("./grafos/SemCicloEuleriano.net");
+		Grafo_ND_P SCE = new Grafo_ND_P(SCEfile);
+		System.out.println("Contem ciclo Euleriano: "+SCE.existeCicloEuleriano());
+		System.out.println();
+		System.out.println("============================================================");
+		System.out.println("Exercício 4 | grafo: fln_pequena.net raiz: 4");
+		File flnPBFFile = new File("./grafos/fln_pequena.net");
+		BellmanFord flnPBF = new BellmanFord(flnPBFFile, 4);
+		System.out.println();
+		System.out.println("============================================================");
 	}
 
 }

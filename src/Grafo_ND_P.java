@@ -20,6 +20,10 @@ public class Grafo_ND_P {
 		
 	}
 	
+	public Grafo_ND_P (File file) throws IOException {
+		ler(file);
+	}
+	
 	// Construtor com parâmetros
 	public Grafo_ND_P(String[] Vertice,int[][] E_Aresta,float[] w_Peso) {
 		// Array de vertices
@@ -237,40 +241,40 @@ public class Grafo_ND_P {
 	}
 	
 	// Verifica se todos os graus são par, caso não sejam, o ciclo Euleriano não existe
-	protected int existeCicloEuleriano(Grafo_ND_P grafo) {	
+	protected boolean existeCicloEuleriano() {	
 		// Percorre o numero de Vertices
-		for (int i = 1; i <= grafo.V.length; i++) {
+		for (int i = 1; i <= V.length; i++) {
 			// Chama o método que pega o grau e verifica se é par
-			if ((grafo.grau(i)) % 2 != 0) {
+			if ((grau(i)) % 2 != 0) {
 				// Caso não par retorna 0
-				return 0;
+				return false;
 			}
 		}
 		// Caso todos sejam pares retorna 1 
-		return 1;
+		return true;
 	}
 	
 	// Encontra o index e outro vertice
-	protected List<Integer> findByNumber(Grafo_ND_P grafo, int path, int v) {
+	protected List<Integer> findByNumber(int path, int v) {
 		// Lista para index e Vertice
 		List<Integer> indexN2 = new ArrayList<Integer>();
 		// Percorre todas as Arestas
-		for (int i = 0; i < grafo.E.length; i++) {
+		for (int i = 0; i < E.length; i++) {
 			// Caso aresta esteja disponivel, e valores das arestas estejam corretas
-			if (grafo.E[i][1] == path && grafo.E[i][0] == v && grafo.E[i][3] == 1) {
+			if (E[i][1] == path && E[i][0] == v && E[i][3] == 1) {
 				// Adiciona index
 				indexN2.add(i);
 				// Adiciona Vertice da aresta
-				indexN2.add(grafo.E[i][1]);
+				indexN2.add(E[i][1]);
 				// retorna Lista
 				return indexN2;
 			}
 			// Caso aresta esteja disponivel, e valores das arestas estejam corretas
-			if (grafo.E[i][0] == path && grafo.E[i][1] == v && grafo.E[i][3] == 1) {
+			if (E[i][0] == path && E[i][1] == v && E[i][3] == 1) {
 				// Adiciona index
 				indexN2.add(i);
 				// Adiciona Vertice da aresta
-				indexN2.add(grafo.E[i][0]);
+				indexN2.add(E[i][0]);
 				// retorna Lista
 				return indexN2;
 			}
@@ -280,12 +284,12 @@ public class Grafo_ND_P {
 	}
 	
 	// Busca o caminho euleriano por meio do primeiro Vertice
-	protected List<Integer> caminhoCicloEuleriano(Grafo_ND_P grafo) {
+	protected List<Integer> caminhoCicloEuleriano() {
 		// Arestas podem estar "abertas" ou "fechadas", caso abertas o caminho pode passar por elas, caso fechadas
 		// não passa
 		
 		// Deixa todas as Arestas como abertas
-		for (int i = 0; i < grafo.E.length; i++) {
+		for (int i = 0; i < E.length; i++) {
 			E[i][3] = 1;
 		}
 		
@@ -301,13 +305,13 @@ public class Grafo_ND_P {
 		pathFinal.add(v);
 		while (true) {
 			// Lista de vizinhos para verificar os caminhos
-			List<Integer> paths = grafo.vizinhos(v);
+			List<Integer> paths = vizinhos(v);
 			// Sort para sempre buscar o caminho com menor indice dos Vertices disponiveis
 			paths.sort(null);
 			// Percorre o tamanho dos vizinhos
 			for (int i = 0; i < paths.size(); i++) {
 				// Busca o vizinho que possui disponibilidade
-				indexN2 = grafo.findByNumber(grafo, paths.get(i), v);
+				indexN2 = findByNumber(paths.get(i), v);
 				// Se está aresta está disponível
 				if (indexN2 != null) {
 					// Adiciona vertice ao caminho
@@ -315,7 +319,7 @@ public class Grafo_ND_P {
 					// v recebe novo valor
 					v = indexN2.get(1);
 					// Fecha a aresta
-					grafo.E[indexN2.get(0)][3] = 0;
+					E[indexN2.get(0)][3] = 0;
 					// "Pula" o for
 					break;
 				}
